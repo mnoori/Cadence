@@ -3,11 +3,10 @@
   "description": "Cadence — agentic coding quality, operationalized. Three pillars on three rhythms (Research / Gates / Sweeps), inspired by talks at AI Agents 2026, with the specialist-lens dispatch and scope-change drill as Patchline's contribution. Install once, reload plugins, then use cadence-pr-review on any branch.",
   "version": "0.2.0-alpha.2",
   "author": {
-    "name": "Patchline AI",
-    "url": "https://patchline.ai"
+    "name": "mnoori"
   },
-  "homepage": "https://github.com/Patchline-AI/Cadence",
-  "repository": "https://github.com/Patchline-AI/Cadence",
+  "homepage": "https://github.com/mnoori/Cadence",
+  "repository": "https://github.com/mnoori/Cadence",
   "license": "MIT",
   "skills": "./skills/",
   "keywords": [
