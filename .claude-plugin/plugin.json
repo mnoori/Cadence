@@ -1,7 +1,7 @@
 {
   "name": "cadence",
-  "description": "Cadence — agentic coding quality, operationalized. Three pillars on three rhythms (Research / Gates / Sweeps), inspired by talks at AI Agents 2026, with the specialist-lens dispatch and scope-change drill as Patchline's contribution. Install once, reload plugins, then use cadence-pr-review on any branch.",
-  "version": "0.2.0-alpha.2",
+  "description": "Cadence — agentic coding quality, operationalized. Three pillars on three rhythms (Research / Gates / Sweeps), inspired by talks at AI Agents 2026, with the specialist-lens dispatch and scope-change drill added on top. Install once, reload plugins, then use cadence-pr-review on any branch.",
+  "version": "0.3.0",
   "author": {
     "name": "mnoori"
   },

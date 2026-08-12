@@ -6,14 +6,14 @@
 # Customize via env vars:
 #   CADENCE_DIR = where the Cadence repo lives (default: ~/.claude-cadence)
 #   SKILLS_DIR  = your Claude skills dir        (default: ~/.claude/skills)
-#   REPO_URL    = git remote                    (default: https://github.com/Patchline-AI/Cadence.git)
+#   REPO_URL    = git remote                    (default: https://github.com/mnoori/Cadence.git)
 #   BRANCH      = branch to track               (default: main)
 
 set -euo pipefail
 
 CADENCE_DIR="${CADENCE_DIR:-$HOME/.claude-cadence}"
 SKILLS_DIR="${SKILLS_DIR:-$HOME/.claude/skills}"
-REPO_URL="${REPO_URL:-https://github.com/Patchline-AI/Cadence.git}"
+REPO_URL="${REPO_URL:-https://github.com/mnoori/Cadence.git}"
 BRANCH="${BRANCH:-main}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

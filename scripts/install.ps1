@@ -5,14 +5,14 @@
 # Customize via env vars:
 #   CADENCE_DIR = where the Cadence repo lives (default: $HOME\.claude-cadence)
 #   SKILLS_DIR  = your Claude skills dir        (default: $HOME\.claude\skills)
-#   REPO_URL    = git remote                    (default: https://github.com/Patchline-AI/Cadence.git)
+#   REPO_URL    = git remote                    (default: https://github.com/mnoori/Cadence.git)
 #   BRANCH      = branch to track               (default: main)
 
 $ErrorActionPreference = "Stop"
 
 $CadenceDir = if ($env:CADENCE_DIR) { $env:CADENCE_DIR } else { Join-Path $HOME ".claude-cadence" }
 $SkillsDir = if ($env:SKILLS_DIR) { $env:SKILLS_DIR } else { Join-Path $HOME ".claude\skills" }
-$RepoUrl = if ($env:REPO_URL) { $env:REPO_URL } else { "https://github.com/Patchline-AI/Cadence.git" }
+$RepoUrl = if ($env:REPO_URL) { $env:REPO_URL } else { "https://github.com/mnoori/Cadence.git" }
 $Branch = if ($env:BRANCH) { $env:BRANCH } else { "main" }
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path

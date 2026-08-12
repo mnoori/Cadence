@@ -2,7 +2,7 @@
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Plugin-D97757)](https://docs.claude.com/en/docs/claude-code/plugins)
 [![License: MIT](https://img.shields.io/badge/License-MIT-0068FF)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-0.2.0--alpha.2-00E6E2)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.3.0-00E6E2)](./CHANGELOG.md)
 
 **Quality at agentic velocity. Research, Gates, Sweeps.**
 
@@ -10,43 +10,46 @@ When agents produce code 10–50× faster than your CI absorbs it, quality stops
 
 ## Install
 
-Two steps. The first step is a **shell command, not a slash command** — run it from a plain terminal, not from inside a Claude Code chat session.
+Clone the repo, run the installer. Cadence has no marketplace, no MCP server, and no external account — it installs pure local skills.
 
-### Step 1 — add the marketplace (plain terminal)
+> This repository is **private**. You need to be a collaborator and have `git` authenticated (via `gh auth login` or an SSH key / PAT) before the clone will succeed.
 
-```bash
-# Run this in your shell, NOT inside a /chat session
-claude plugin marketplace add Patchline-AI/Aria
-```
-
-The Patchline AI marketplace is hosted from the Aria repo and lists Cadence as a second plugin entry. Expected output:
-
-```
-✔ Successfully added marketplace: patchline-ai (declared in user settings)
-```
-
-If you added the Patchline marketplace during an earlier alpha, refresh the
-local marketplace cache first:
+### macOS / Linux
 
 ```bash
-claude plugin marketplace update patchline-ai
+git clone https://github.com/mnoori/Cadence.git ~/.claude-cadence
+bash ~/.claude-cadence/scripts/install.sh
 ```
 
-### Step 2 — install the plugin (inside Claude Code)
+### Windows PowerShell
 
-Now start a Claude Code session (`claude`), then run these as slash commands inside the session:
+```powershell
+git clone https://github.com/mnoori/Cadence.git "$env:USERPROFILE\.claude-cadence"
+pwsh "$env:USERPROFILE\.claude-cadence\scripts\install.ps1"
+```
+
+The installer symlinks `cadence-pr-review`, `cadence-research`, and `cadence-sweep` into your Claude skills directory (`~/.claude/skills/`). It's idempotent — re-run it any time to update, and it skips any existing non-symlink skill directory rather than overwriting it.
+
+### Activate
+
+Start a Claude Code session (`claude`), then:
 
 ```text
-/plugin install cadence@patchline-ai
 /reload-plugins
 ```
 
-Expected output: `✓ Installed cadence. Run /reload-plugins to apply.` followed by `Reloaded: 1 plugin · …`. Cadence has no MCP server and no external account: it installs pure local skills.
-
-Some builds report `0 skills` in the reload summary even though namespaced
-plugin skills are installed. The reliable check is to run one of the Cadence
-commands, such as `/cadence:cadence-sweep`, or ask Claude in natural language:
+Some builds report `0 skills` in the reload summary even though the skills are
+installed. The reliable check is to run one of the Cadence commands, such as
+`/cadence-sweep`, or ask Claude in natural language:
 `Run a weekly sweep on this repo.`
+
+### Updating
+
+```bash
+git -C ~/.claude-cadence pull
+```
+
+Then `/reload-plugins` in your session.
 
 ### Try it — first runs after install
 
@@ -58,10 +61,10 @@ Run a weekly sweep on this repo.
 
 That triggers `cadence-sweep` to walk through the weekly drift checks and print findings + the gate-upgrade PRs each finding implies. Two more concrete first runs:
 
-If you prefer the explicit namespaced command:
+If you prefer the explicit command form:
 
 ```text
-/cadence:cadence-sweep
+/cadence-sweep
 ```
 
 ```text
@@ -70,22 +73,6 @@ Use cadence-pr-review on the current branch.
 
 ```text
 Run cadence-research on <subsystem-or-file> before I touch it.
-```
-
-### Fallback installer (when `/plugin` is not in your Claude Code build)
-
-Some older Claude Code builds don't expose `/plugin` yet. Symlink installer instead:
-
-```bash
-git clone https://github.com/Patchline-AI/Cadence.git ~/.claude-cadence
-bash ~/.claude-cadence/scripts/install.sh
-```
-
-On Windows PowerShell:
-
-```powershell
-git clone https://github.com/Patchline-AI/Cadence.git "$env:USERPROFILE\.claude-cadence"
-pwsh "$env:USERPROFILE\.claude-cadence\scripts\install.ps1"
 ```
 
 ---
@@ -151,7 +138,7 @@ See [`docs/examples/reviewing-an-agent-pr.md`](./docs/examples/reviewing-an-agen
 
 ## Quickstart
 
-See [`docs/quickstart.md`](./docs/quickstart.md). Five minutes from `/plugin install` to a verified report.
+See [`docs/quickstart.md`](./docs/quickstart.md). Five minutes from `git clone` to a verified report.
 
 ## Why Cadence
 
@@ -165,14 +152,13 @@ Three things this plugin does that a generic "code review" tool doesn't:
 
 The skills ship with **generic patterns** that apply to most codebases. To layer your codebase-specific patterns:
 
-1. Inside Claude Code, run `/plugin info cadence` to find the install path. On `/plugin install` it lands at `~/.claude/plugins/cache/patchline-ai/cadence/<version>/`. The fallback symlink installer puts it at `~/.claude/skills/cadence-pr-review/`.
-2. Edit `<install-path>/skills/cadence-pr-review/references/<standard>.md`.
-3. Add your patterns to the relevant standard's checklist.
-4. Run `/reload-plugins` (or restart the session). The skill picks up the changes on next invocation.
+1. Edit `~/.claude-cadence/skills/cadence-pr-review/references/<standard>.md` in your clone (the installer symlinks to it, so edits take effect in place).
+2. Add your patterns to the relevant standard's checklist.
+3. Run `/reload-plugins` (or restart the session). The skill picks up the changes on next invocation.
 
-**Faster path — calibrate once.** Instead of editing the cache, run the first-run calibration (`reference/calibration.md`). It auto-detects your base branch, package manager, test runner, service/store/hook dirs, secret module, suite map, drift log, hot tables, and high-surface paths into a `.cadence/profile.md` **in your repo** (survives reinstalls). All three skills read it on every invocation.
+**Faster path — calibrate once.** Instead of editing the reference docs, run the first-run calibration (`reference/calibration.md`). It auto-detects your base branch, package manager, test runner, service/store/hook dirs, secret module, suite map, drift log, hot tables, and high-surface paths into a `.cadence/profile.md` **in your repo** (survives reinstalls and `git pull`). All three skills read it on every invocation. This is the preferred path — it keeps your specifics out of the Cadence clone entirely.
 
-Direct edits inside the plugin cache can be overwritten by reinstall/update. If your patterns become team policy, fork Cadence or vendor the reference files into your own team skill.
+Edits made directly in the clone will conflict on your next `git pull`. If your patterns become team policy, fork Cadence or vendor the reference files into your own team skill.
 
 This is the migration path: install with the generic patterns, layer your specifics on top.
 
@@ -190,4 +176,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md). Issues + PRs welcome. Add new patterns
 
 ## Made by
 
-[Patchline AI](https://patchline.ai). We build agentic music tooling. Cadence is the quality framework we extracted from running AI agents against our own production codebase.
+Built for **Days of Build**. Cadence is the quality framework extracted from running AI agents against a real production codebase — generic by design, so it drops into any repo.

@@ -4,6 +4,20 @@ All notable changes to Cadence will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.0] — 2026-08-12
+
+Repository relocation and de-branding. **No skill content changed — all 13 review passes are byte-identical to 0.2.0-alpha.2.**
+
+### Changed
+- **New home.** Cadence now lives at `mnoori/Cadence` as a standalone private repository, independent of any organization. All clone URLs, issue links, and installer `REPO_URL` defaults updated.
+- **Install is now clone-only.** Marketplace distribution is dropped. The documented path is `git clone` + `scripts/install.sh` / `scripts/install.ps1`, which symlink the three skills into `~/.claude/skills/`. README, quickstart, and troubleshooting rewritten to match; all `/plugin install`, `/plugin info`, and marketplace-cache instructions removed.
+- **Skill invocation is un-namespaced.** `/cadence:cadence-sweep` → `/cadence-sweep`, matching the symlink install layout.
+- **Generalized.** All organization-specific references removed from docs, manifest, license, and contributing guidelines. The skills themselves were already generic (they reference "your codebase's X module" rather than named systems) and are unchanged.
+- **Customization guidance now leads with calibration.** `.cadence/profile.md` in your own repo is the documented path, since edits inside the clone conflict on `git pull`.
+
+### Consolidated
+- Branches `feat/comprehensive-hardening` (0.2.0-alpha.1) and `fix/codebase-drift-base-resolution` (0.2.0-alpha.2) were verified content-identical to or superseded by `main` and retired. `main` is the single source of truth.
+
 ## [0.2.0-alpha.2] — 2026-06-03
 
 ### Fixed — `cadence-pr-review`
@@ -39,7 +53,7 @@ Comprehensive hardening pass. **Additive only — no skill content removed.**
 ## [0.1.0-alpha.4] — 2026-05-07
 
 ### Fixed
-- README customization path now matches the actual install layouts. The previous instruction pointed at `~/.claude/skills/cadence-pr-review/...`, which only resolves for the symlink fallback installer. The corrected step routes users through `/plugin info cadence` first, then names both the plugin-cache layout (`~/.claude/plugins/cache/patchline-ai/cadence/<version>/`) and the symlink layout, and adds a `/reload-plugins` step + a note that direct cache edits can be overwritten on reinstall.
+- README customization path now matches the actual install layouts. The previous instruction pointed at `~/.claude/skills/cadence-pr-review/...`, which only resolves for the symlink installer. The corrected step named both the plugin-cache layout and the symlink layout, and added a `/reload-plugins` step + a note that direct cache edits can be overwritten on reinstall. (Superseded in 0.3.0 — install is now clone-only.)
 - Quickstart eval-verification step no longer assumes users are inside the Cadence repo. The relative `skills/cadence-pr-review/evals/sample-pr/` path doesn't resolve for `/plugin install` users — the new step has them resolve `<install-path>` via `/plugin info cadence` first, with a parenthetical for the cloned-repo case.
 - README version badge bumped to `0.1.0-alpha.4` so the homepage stops claiming `0.1.0-alpha`.
 
@@ -47,7 +61,7 @@ Comprehensive hardening pass. **Additive only — no skill content removed.**
 
 ### Fixed
 - Removed the stale Cadence-local marketplace manifest so `claude plugin validate`
-  validates Cadence as a plugin. Aria remains the Patchline AI marketplace.
+  validates Cadence as a plugin. (Marketplace distribution was dropped entirely in 0.3.0.)
 
 ## [0.1.0-alpha.2] — 2026-05-07
 

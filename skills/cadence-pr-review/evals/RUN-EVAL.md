@@ -24,6 +24,6 @@ Example invocation (from inside the repo):
 
 > Use cadence-pr-review on `skills/cadence-pr-review/evals/auth-pr/` against `skills/cadence-pr-review/evals/expected-findings-auth.md`.
 
-For `/plugin install` users, resolve the install path with `/plugin info cadence` first and prefix it to the paths above.
+From outside the repo, prefix the paths above with your clone location (default `~/.claude-cadence/`).
 
 Always run review on a frontier model (Claude Opus 4.6+) with maximum reasoning/thinking enabled — review is not where to economize on model or budget. The trio fixtures (`lambda-pr`/`auth-pr`/`rate-limit-pr`) are the most demanding; if they miss findings while `sample-pr` passes, you're under-powered — raise the model/thinking before suspecting the skill.

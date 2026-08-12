@@ -2,28 +2,42 @@
 
 ## Install issues
 
-### "`/plugin` is not available in my Claude Code build"
+### "`git clone` fails with authentication / not-found"
 
-Some Claude Code builds do not expose plugin commands yet. Install Cadence by
-cloning the repo and symlinking its three skills instead.
+This repository is **private**. A 404 on clone usually means auth, not a typo —
+GitHub returns "not found" rather than "forbidden" for private repos you can't
+read. Confirm you've been added as a collaborator, then authenticate:
+
+```bash
+gh auth login
+```
+
+Or use an SSH remote if you have a key registered:
+
+```bash
+git clone git@github.com:mnoori/Cadence.git ~/.claude-cadence
+```
+
+### "Where does the installer put things?"
 
 macOS / Linux:
 
 ```bash
-git clone https://github.com/Patchline-AI/Cadence.git ~/.claude-cadence
+git clone https://github.com/mnoori/Cadence.git ~/.claude-cadence
 bash ~/.claude-cadence/scripts/install.sh
 ```
 
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/Patchline-AI/Cadence.git "$env:USERPROFILE\.claude-cadence"
+git clone https://github.com/mnoori/Cadence.git "$env:USERPROFILE\.claude-cadence"
 pwsh "$env:USERPROFILE\.claude-cadence\scripts\install.ps1"
 ```
 
 The installer links `cadence-pr-review`, `cadence-research`, and
-`cadence-sweep` into your Claude skills directory. It skips any existing
-non-symlink skill directory instead of overwriting it.
+`cadence-sweep` into your Claude skills directory (`~/.claude/skills/`). It skips
+any existing non-symlink skill directory instead of overwriting it. Override the
+defaults with `CADENCE_DIR`, `SKILLS_DIR`, `REPO_URL`, or `BRANCH` env vars.
 
 ### "Skill not found after `/reload-plugins`"
 
@@ -35,39 +49,28 @@ node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json'))"
 
 Should print nothing and exit 0. If it errors, fix the JSON syntax.
 
-If you installed through `/plugin`, make sure the Patchline AI marketplace was
-added from `Patchline-AI/Aria` in your plain shell, not inside a Claude chat:
+Then confirm the symlinks actually landed:
 
 ```bash
-claude plugin marketplace add Patchline-AI/Aria
+ls -la ~/.claude/skills/ | grep cadence
 ```
 
-If you added the marketplace before Cadence v0.1.0-alpha.3, refresh the local
-marketplace cache:
-
-```bash
-claude plugin marketplace update patchline-ai
-```
-
-Then start Claude Code and run:
-
-```text
-/plugin install cadence@patchline-ai
-```
+You should see three entries pointing into your clone. If they're missing, re-run
+the installer — it's idempotent.
 
 ### "`/reload-plugins` says 0 skills"
 
-Some builds report `0 skills` in the reload summary even when namespaced plugin
-skills are available. Test the namespace directly:
+Some builds report `0 skills` in the reload summary even when the skills are
+available. Test a command directly:
 
 ```text
-/cadence:cadence-sweep
+/cadence-sweep
 ```
 
 If that command runs, Cadence is installed. You can also invoke it in natural
 language: `Run a weekly sweep on this repo.`
 
-### "Plugin shows but skills don't appear"
+### "Skills directory shows but skills don't appear"
 
 Each skill needs a `SKILL.md` directly under `skills/<skill-name>/`. Run:
 
@@ -102,21 +105,20 @@ The drill is mandatory when an agent's completion summary is in the conversation
 
 ### "I added a pattern to references/security-review.md but it's not firing"
 
-Confirm the file is at the right path. Run:
+Confirm the file is at the right path. References live in your clone under
+`~/.claude-cadence/skills/cadence-pr-review/references/` (on Windows,
+`%USERPROFILE%\.claude-cadence\skills\cadence-pr-review\references\`). Edit
+there, then `/reload-plugins`.
 
-```bash
-/plugin info cadence
-```
-
-That shows where Cadence is installed. References live under that install path's `skills/cadence-pr-review/references/` directory. On Windows, plugin installs typically land under `C:\Users\<you>\.claude\plugins\cache\patchline-ai\cadence\<version>\...`. Edit there, then `/reload-plugins`.
-
-Direct edits inside the plugin cache can be overwritten by reinstall/update. If
-the pattern is team policy, fork Cadence or vendor the reference file into your
-own team skill.
+Because the installer symlinks rather than copies, edits in the clone take
+effect in place — but they will conflict on your next `git pull`. The durable
+path is the first-run calibration (`reference/calibration.md`), which writes a
+`.cadence/profile.md` into **your** repo instead. If the pattern is team policy,
+fork Cadence or vendor the reference file into your own team skill.
 
 ## Reporting bugs
 
-Open an issue at https://github.com/Patchline-AI/Cadence/issues. Include:
+Open an issue at https://github.com/mnoori/Cadence/issues. Include:
 
 - Cadence version (`cat .claude-plugin/plugin.json | grep version`)
 - Claude Code version

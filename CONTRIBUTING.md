@@ -12,7 +12,7 @@ Thanks for considering a contribution.
 
 ## What we don't accept
 
-- **Patchline-specific patterns.** Cadence is generic. If a finding only matters to Patchline's codebase, it doesn't belong here.
+- **Codebase-specific patterns.** Cadence is generic. If a finding only matters to one team's codebase, it belongs in that team's `.cadence/profile.md` or a vendored fork — not here.
 - **Vendor-specific patterns** unless broadly applicable. AWS Cognito gotchas are fine; a single-vendor SDK quirk usually isn't.
 - **MCP server additions.** Cadence is intentionally local-only. No external dependencies.
 
